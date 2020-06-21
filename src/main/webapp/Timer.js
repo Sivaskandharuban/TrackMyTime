@@ -1,74 +1,103 @@
-/**
- * 
- */
-console.log("Hello");
-function start() {	
-//	var xhr = new XMLHttpRequest();
-//	xhr.open('POST','\TimeConversion', true);
-//	xhr.send();
-	setInterval(timer, 1000); 
+
+var x;
+
+function login()
+{
+var xhr = new XMLHttpRequest();
+
+var name = document.getElementById("mailId").value;
+var pass =	document.getElementById("Password").value;
+//var params = "name="+name+"'&amp;pass="+pass;
+
+var data = "name=" + encodeURIComponent(name)+ "&pass="+ encodeURIComponent(pass);
+
+console.log(data);
+
+xhr.open('POST','http://localhost:8080/Login', true);
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.send(data);
+
+
+xhr.onreadystatechange = function(){
+	
+	if(this.readyState == 4 && this.status == 400){
+		document.getElementById("result").innerHTML = this.responseText;
 	}
-
-var sec = 0;
-var min = 0;
-var hour = 0;
-
-var secOut = 0;
-var minOut = 0;
-var hourOut = 0;
-
-function timer() {
 	
+    if (this.readyState == 4 && this.status == 200) {
+    	window.location.href = "TMT.html"; 
+    	}
+    
+  };
 }
-	
-	
-	
-	
-	  
 
-//var isChecked = document.getElementById("check").checked;
-//
-//if(isChecked){
-//	  
-//	  secOut = checkTime(sec);
-//	  minOut = checkTime(min);
-//	  hourOut = checkTime(hour);
-//
-//	  sec = ++sec;
-//
-//	  if (sec == 60) {
-//		  sec = 0;
-//		  min=++min;
-//		  sec = sec++;
-//	  }
-//
-//	  if (min == 60) {
-//	    hour = ++hour;
-//	    min = 0;
-//	  }
-//
-//	  var today = new Date();   
-//
-//
-//	  document.getElementById("timeStarted").innerHTML = (today.getHours()<10 ? "0" +today.getHours() : today.getHours()) + ":" + (today.getMinutes()<10 ? "0" +today.getMinutes() : today.getMinutes()) + ":" + (today.getSeconds()<10 ? "0" +today.getSeconds() : today.getSeconds());
-//	  document.getElementById("timeEnded").innerHTML = "Ongoing";
-//	  document.getElementById("totalTime").innerHTML = hourOut + " h " + minOut +" m ";
-////	  document.getElementById("logTime").innerHTML = hourOut + ":" + minOut +":" + secOut;
-//	}
-//
-//
-//	/* Adds 0 when value is <10 */
-//else{
-//	document.getElementById("timeEnded").innerHTML = (today.getHours()<10 ? "0" +today.getHours() : today.getHours()) + ":" + (today.getMinutes()<10 ? "0" +today.getMinutes() : today.getMinutes()) + ":" + (today.getSeconds()<10 ? "0" +today.getSeconds() : today.getSeconds());
-//	
-//}
-//
-//	function checkTime(i) {
-//	  if (i < 10) {
-//	    i = "0" + i;
-//	  }
-//	  return i;
-//	}
+function signUp()
+{
+var xhr = new XMLHttpRequest();
+
+var name = document.getElementById("userName").value;
+var mail = document.getElementById("mailId").value;
+var pass =	document.getElementById("password").value;
+
+var data = "name=" + encodeURIComponent(name)+ "&mail="+ encodeURIComponent(mail) + "&pass="+ encodeURIComponent(pass);
+
+xhr.open('POST','http://localhost:8080/SignUp', true);
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.send(data);
+
+xhr.onreadystatechange = function(){
+	
+	if(this.readyState == 4 && this.status == 400){
+		document.getElementById("result").innerHTML = this.responseText;
+	}
+	
+    if (this.readyState == 4 && this.status == 200) {
+    	window.location.href = "TMT.html";
+    	document.getElementById("message").innerHTML = this.responseText; 
+    	}
+    
+  };
+}
 
 
+function start()
+{
+	console.log("function call start");
+	x = setInterval(timer, 1000);
+	
+	function timer(){
+		var sec= 0;
+		console.log(sec);
+		var min = 0;
+		console.log(min);
+		var hour = 0;
+		console.log(hour);
+		
+		var secOut = check(sec);
+		var minOut = check(min);
+		var hourOut = check(hour);
+		
+		sec = sec++;
+		
+		function check(i){
+			if(i<10){
+				return "0" + i;
+			}
+			
+			if(sec==60){
+				min = ++min;
+				sec = 0;
+			}
+			
+			if(min==60){
+				hour = ++hour;
+				min = 0;
+			}
+			
+			document.getElementsByClassName("totalTime").innerHTML = hourOut + ":" + minOut + ":" + secOut;
+			
+			}
+		}
+	}
+	
 
