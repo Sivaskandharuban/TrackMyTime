@@ -7,29 +7,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.googlecode.objectify.ObjectifyService;
+
 /**
  * Servlet implementation class TimeConversion
  */
 @WebServlet("/TimeConversion")
 public class TimeConversion extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-    /**
-     * Default constructor. 
-     */
-    public TimeConversion() {
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	
+	Long id;
 
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String mailId = request.getParameter("mail");
+		System.out.println(mailId);
+		Long startTime = Long.parseLong(request.getParameter("startTime"));
+		System.out.println(startTime);
+		Long endTime = Long.parseLong(request.getParameter("endTime"));
+		System.out.println(endTime);
+		
+		if(endTime==0) {
+		
+		TimeData td = new TimeData(mailId,startTime,endTime,id++);
+		
+		ObjectifyService.ofy().save().entity(td);
+		}
+		else {
+			TimeData td = new TimeData(mailId,startTime,endTime,id);
+			
+			ObjectifyService.ofy().save().entity(td);
+		}
 	}
+	
 
 }

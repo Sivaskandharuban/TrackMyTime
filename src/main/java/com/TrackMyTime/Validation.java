@@ -13,12 +13,16 @@ public class Validation {
 	@com.googlecode.objectify.annotation.Id
 	Long Id;
 	
+	public long lastEntry;
+	public boolean clockin;
+	
 	public Validation(String userName, String mailId, String password,long Id) {
 		this.userName=userName;
 		System.out.println(userName);
 		this.mailId=mailId;
 		System.out.println(mailId);
 		this.password=password;
+		
 	
 		this.Id=Id;
 	}

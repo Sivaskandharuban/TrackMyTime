@@ -7,16 +7,39 @@ import com.googlecode.objectify.annotation.Index;
 public class TimeData {
 	
 	@Index
-	String userMail = "";
-	Long startTime = 0L;
-	Long endTime = 0L;
+	String mailId;
+	Long startTime;
+	Long endTime;
+	@com.googlecode.objectify.annotation.Id
+	Long id;
 	
-	public String getUserMail() {
-		return userMail;
+	public TimeData(String mailId, Long startTime, Long endTime, Long id) {
+		// TODO Auto-generated constructor stub
+		 this.mailId = mailId;
+		 this.startTime = startTime;
+		 this.endTime = endTime;
+		 
+		 this.id = id;
 	}
-	public void setUserMail(String userMail) {
-		this.userMail = userMail;
+	
+	
+	public TimeData() {
+		// TODO Auto-generated constructor stub
+		
 	}
+	
+	
+	
+	public String getMailId() {
+		return mailId;
+	}
+
+
+	public void setMailId(String mailId) {
+		this.mailId = mailId;
+	}
+
+
 	public Long getStartTime() {
 		return startTime;
 	}
