@@ -16,6 +16,31 @@ public class Validation {
 	public long lastEntry;
 	public boolean clockin;
 	
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+
+	public long getLastEntry() {
+		return lastEntry;
+	}
+
+	public void setLastEntry(long lastEntry) {
+		this.lastEntry = lastEntry;
+	}
+
+	public boolean isClockin() {
+		return clockin;
+	}
+
+	public void setClockin(boolean clockin) {
+		this.clockin = clockin;
+	}
+	
+	
 	public Validation(String userName, String mailId, String password,long Id) {
 		this.userName=userName;
 		System.out.println(userName);

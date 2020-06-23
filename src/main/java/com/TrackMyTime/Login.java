@@ -24,8 +24,17 @@ public class Login extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		PrintWriter out = response.getWriter();		
+		
+		HttpSession session = request.getSession(false);
+		if(session!=null) {
+			out.println("User already Login");
+			response.sendRedirect("/Dashboard");
+		}
+		
 
-		PrintWriter out = response.getWriter();
+		else {
 
 //		ServletContext context = request.getServletContext();
 //		HashMap<String, String> save = (HashMap<String, String>) context.getAttribute("Logs");
@@ -37,27 +46,31 @@ public class Login extends HttpServlet {
 
 		String mailId = request.getParameter("name");
 		String password = request.getParameter("pass");
+		
 
 		System.out.println(mailId + " " + password);
 
-		Validation getMail = ObjectifyService.ofy().load().type(Validation.class).filter("mailId", mailId).first()
+		Validation user = ObjectifyService.ofy().load().type(Validation.class).filter("mailId", mailId).first()
 				.now();
 
-		System.out.println("Hi " + getMail);
+		System.out.println("Hi " + user);
 
-		if (getMail == null) {
+		if (user == null) {
 			response.setStatus(400);
 			out.print("Mail id does not exist");
 		}
 
-		else if (getMail.getMailId().equals(mailId)) {
-			if (getMail.getPassword().equals(password)) {
+		else if (user.getMailId().equals(mailId)) {
+			if (user.getPassword().equals(password)) {
 
 //				response.sendRedirect("index.html");
-				HttpSession session = request.getSession();
+				session = request.getSession();
 				session.setAttribute("mailId", mailId);
+				session.setAttribute("lastEntry", user.getLastEntry());
+				session.setAttribute("userId",user.getId());
+				session.setAttribute("clockin",false);
 				out.print("Login Successful");
-//				response.sendRedirect("TMT.html");
+				response.sendRedirect("/Dashboard");
 				return;
 
 			}
@@ -73,6 +86,7 @@ public class Login extends HttpServlet {
 			response.setStatus(400);
 			out.print("<font color = 'red'>Invalid Mail Id </font>");
 		}
+	}
 	}
 
 }

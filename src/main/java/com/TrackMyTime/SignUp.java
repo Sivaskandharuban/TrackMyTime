@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.googlecode.objectify.ObjectifyService;
 
@@ -28,7 +29,7 @@ public class SignUp extends HttpServlet {
 	private Pattern pattern;
 	private Matcher matcher;
 
-	static Long Id;
+	static Long Id =0L;
 
 	private static final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -44,18 +45,11 @@ public class SignUp extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ServletContext context = request.getServletContext();
-		HashMap<String, String> save = (HashMap<String, String>) context.getAttribute("Logs");
-
-		if (save == null) {
-			save = new HashMap();
-			context.setAttribute("Logs", save);
-		}
-
 		PrintWriter out = response.getWriter();
 
 		String userName = request.getParameter("name");
 		String mailId = request.getParameter("mail");
+		System.out.println(mailId);
 		String Password = request.getParameter("pass");
 
 		if (userName.isEmpty()) {
@@ -63,12 +57,12 @@ public class SignUp extends HttpServlet {
 			out.print("<font color='red'>*User name should not be empty</font>");
 		}
 //		
-//		else if (validate(mailId)==false) {
-//			out.print("<font color='red'>*invalid mail format</font>");			
-//		}
+		else if (validate(mailId)==false) {
+			response.setStatus(400);
+			out.print("<font color='red'>*invalid mail format</font>");			
+		}
 
-		Validation duplicate = ObjectifyService.ofy().load().type(Validation.class).filter("mailId", mailId).first()
-				.now();
+		Validation duplicate = ObjectifyService.ofy().load().type(Validation.class).filter("mailId",mailId).first().now();
 		System.out.println(duplicate);
 
 		if (duplicate != null) {
@@ -84,10 +78,16 @@ public class SignUp extends HttpServlet {
 		}
 
 		else {
-			
-			Validation valid = new Validation(userName, mailId, Password, Id++);
+			Validation user = new Validation(userName, mailId, Password, ++Id);
 
-			ObjectifyService.ofy().save().entity(valid);
+			ObjectifyService.ofy().save().entity(user);
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("mailId", mailId);
+//			session.setAttribute("lastEntry", user.getLastEntry());
+//			session.setAttribute("userId",user.getId());
+//			session.setAttribute("clockin",false);
+			
 
 //			context.setAttribute("Logs", save);
 
@@ -96,7 +96,9 @@ public class SignUp extends HttpServlet {
 
 //			RequestDispatcher rs = request.getRequestDispatcher("TMT.html");
 //			rs.forward(request, response);
-		}
+			
+//					}
 	}
 
+}
 }

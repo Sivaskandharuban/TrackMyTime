@@ -6,12 +6,32 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 public class TimeData {
 	
+	public String getTaskDescription() {
+		return taskDescription;
+	}
+
+
+	public void setTaskDescription(String taskDescription) {
+		this.taskDescription = taskDescription;
+	}
+
+
+	public String getProject() {
+		return project;
+	}
+
+
+	public void setProject(String project) {
+		this.project = project;
+	}
 	@Index
 	String mailId;
 	Long startTime;
 	Long endTime;
 	@com.googlecode.objectify.annotation.Id
 	Long id;
+	String taskDescription;
+	String project;
 	
 	public TimeData(String mailId, Long startTime, Long endTime, Long id) {
 		// TODO Auto-generated constructor stub
@@ -20,6 +40,8 @@ public class TimeData {
 		 this.endTime = endTime;
 		 
 		 this.id = id;
+		 
+		 
 	}
 	
 	
@@ -52,7 +74,4 @@ public class TimeData {
 	public void setEndTime(Long endTime) {
 		this.endTime = endTime;
 	}
-	
-	
-
 }

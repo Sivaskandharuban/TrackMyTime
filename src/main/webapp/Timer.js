@@ -7,7 +7,7 @@ var xhr = new XMLHttpRequest();
 
 name = document.getElementById("mailId").value;
 var pass =	document.getElementById("Password").value;
-//var params = "name="+name+"'&amp;pass="+pass;
+// var params = "name="+name+"'&amp;pass="+pass;
 
 var data = "name=" + encodeURIComponent(name)+ "&pass="+ encodeURIComponent(pass);
 
@@ -24,9 +24,9 @@ xhr.onreadystatechange = function(){
 		document.getElementById("result").innerHTML = this.responseText;
 	}
 	
-    if (this.readyState == 4 && this.status == 200) {
-    	window.location.href = "TMT.html"; 
-    	}
+//    if (this.readyState == 4 && this.status == 200) {
+//    	window.location.href = "TMT.html"; 
+//    	}
     
   };
 }
@@ -52,14 +52,14 @@ xhr.onreadystatechange = function(){
 	}
 	
     if (this.readyState == 4 && this.status == 200) {
-    	window.location.href = "TMT.html";
-    	document.getElementById("message").innerHTML = this.responseText; 
+    	window.location.replace = "/Dashboard";
+//    	document.getElementById("message").innerHTML = this.responseText; 
     	}
     
   };
 }
 
-//Login Page Functionalities
+// Login Page Functionalities
 
 
 var x;
@@ -73,13 +73,13 @@ var secOut = 0;
 var minOut = 0;
 var hourOut = 0;
 
-var time = new Date();
-
-var curHour = time.getHours()<10 ?"0" + time.getHours() : time.getHours();
-var curMin = time.getMinutes()<10 ?"0" + time.getMinutes() : time.getMinutes();
-var curSec = time.getSeconds()<10 ?"0" + time.getSeconds() : time.getSeconds();
-
-var currentTime = curHour + ":" + curMin + ":" + curSec;
+//var time = new Date();
+//
+//var curHour = time.getHours()<10 ?"0" + time.getHours() : time.getHours();
+//var curMin = time.getMinutes()<10 ?"0" + time.getMinutes() : time.getMinutes();
+//var curSec = time.getSeconds()<10 ?"0" + time.getSeconds() : time.getSeconds();
+//
+//var currentTime = curHour + ":" + curMin + ":" + curSec;
 
 var myTable = document.getElementById("clockTable");
 var row ;
@@ -93,12 +93,8 @@ var startTime;
 var endTime;
 
 function set(){
-onOff = onOff+1;
-
-
-
-
 	
+onOff = onOff+1;	
 	if(onOff%2==1){
 		if(onOff==1){
 			var xhr = new XMLHttpRequest();
@@ -107,35 +103,46 @@ onOff = onOff+1;
 			console.log(startTime);
 			endTime = 0;
 
-			xhr.open('GET','http://localhost:8080/TimeConversion', true);
+			xhr.open('GET','http://localhost:8080/ClockIn', true);
 			xhr.send();
 		console.log("redirecting to start");
+		 start();
 		
-		xhr.onreadystatechange = function(){
+		xhr.onreadystatechange = function(){	
 			
-			
+			if(this.readyState == 4 && this.status == 400){
+				document.getElementById("message").innerHTML = this.response;
+			}
+
 			
 		    if (this.readyState == 4 && this.status == 200) {
-		    	document.getElementById("timeStarted").innerHTML = this.response
-		    	}
-		    
+		    	document.getElementById("timeStarted").innerHTML = this.response;
+		    	}	    
 		  };
+		 
 		}
 		
-		start();
 		
-		}
 		else{
 			var xhr = new XMLHttpRequest();
 
 			startTime = Date.now();
 			console.log(startTime);
 			endTime = 0;
-
-			xhr.open('GET','http://localhost:8080/TimeConversion', true);
+			xhr.open('GET','http://localhost:8080/ClockIn', true);
 			xhr.send();
 			console.log("redirecting to addStart");
 			addStart();
+			xhr.onreadystatechange = function(){	
+				
+				if(this.readyState == 4 && this.status == 400){
+					document.getElementById("message").innerHTML = this.response;
+				}
+
+			    if (this.readyState == 4 && this.status == 200) {
+			    	cell3.innerHTML = this.response;
+			    	}	    
+			  };
 		}
 	}
 	else{
@@ -145,10 +152,19 @@ onOff = onOff+1;
 			endTime = Date.now();
 			console.log(endTime);
 
-			xhr.open('GET','http://localhost:8080/TimeConversion?' +"mail="+name + "&startTime="+ startTime + "&endTime="+ endTime+ "", true);
+			xhr.open('GET','http://localhost:8080/ClockOut', true);
 			xhr.send();
 		console.log("redirecting to stop");
 		stop();
+		xhr.onreadystatechange = function(){	
+			if(this.readyState == 4 && this.status == 400){
+				document.getElementById("message").innerHTML = this.response;
+			}
+
+		    if (this.readyState == 4 && this.status == 200) {
+		    	document.getElementById("timeEnded").innerHTML= this.response;
+		    	}	    
+		  };
 		}
 		else{
 			var xhr = new XMLHttpRequest();
@@ -156,13 +172,23 @@ onOff = onOff+1;
 			endTime = Date.now();
 			console.log(endTime);
 
-			xhr.open('GET','http://localhost:8080/TimeConversion?' +"mail="+name + "&startTime="+ startTime + "&endTime="+ endTime+ "", true);
+			xhr.open('GET','http://localhost:8080/ClockOut', true);
 			xhr.send();
 			console.log("redirecting to addStop");
 			addStop();
+			xhr.onreadystatechange = function(){
+				if(this.readyState == 4 && this.status == 400){
+					document.getElementById("message").innerHTML = this.response;
+				}
+
+			    if (this.readyState == 4 && this.status == 200) {
+			    	cell4.innerHTML= this.response;
+			    	}	    
+			  };
 		}
 	}
-}
+	
+
 
 
 function start()
@@ -194,8 +220,8 @@ function start()
 		
 		document.getElementById("totalTime").innerHTML = hourOut + "h " + minOut + "m";
 		document.getElementById("timer").innerHTML = hourOut + ":" + minOut + ":" + secOut;
-		document.getElementById("timeStarted").innerHTML = currentTime;
-		document.getElementById("timeEnded").innerHTML = "Ongoing";
+//		document.getElementById("timeStarted").innerHTML = currentTime;
+//		document.getElementById("timeEnded").innerHTML = "Ongoing";
 		console.log("hi");
 	}
 
@@ -211,7 +237,7 @@ function start()
 function stop()
 {
 	clearInterval(x);
-	document.getElementById("timeEnded").innerHTML = currentTime;
+//	document.getElementById("timeEnded").innerHTML = currentTime;
 }
 
 function addStart(){
@@ -246,8 +272,8 @@ function timer2(){
 	
 	cell1.innerHTML = "Add Task Description";
 	cell2.innerHTML = "Project Working";
-	cell3.innerHTML = currentTime;
-	cell4.innerHTML = "Ongoing";
+//	cell3.innerHTML = currentTime;
+//	cell4.innerHTML = "Ongoing";
 	cell5.innerHTML = hourOut + "h " + minOut + "m";
 	
 	document.getElementById("timer").innerHTML = hourOut + ":" + minOut + ":" + secOut;
@@ -266,10 +292,14 @@ function timer2(){
 	function addStop()
 	{
 		clearInterval(x);
-		cell4.innerHTML = currentTime;
+//		cell4.innerHTML = currentTime;
 	}
 	
 	
-	
+}
+
+//var entries = 
+
+
 	
 
