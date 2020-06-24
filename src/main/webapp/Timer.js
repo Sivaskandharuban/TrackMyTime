@@ -1,21 +1,26 @@
 
-var name;
+
 
 function login()
 {
 var xhr = new XMLHttpRequest();
 
-name = document.getElementById("mailId").value;
+var mail = document.getElementById("mailId").value;
 var pass =	document.getElementById("Password").value;
 // var params = "name="+name+"'&amp;pass="+pass;
 
-var data = "name=" + encodeURIComponent(name)+ "&pass="+ encodeURIComponent(pass);
+//var data = "name=" + encodeURIComponent(name)+ "&pass="+ encodeURIComponent(pass);
 
-console.log(data);
+var logDetails = {
+	mailId : mail,
+	password : pass
+};
+
+//var jsonLogDetails = JSON.stringify(logDetails);
 
 xhr.open('POST','http://localhost:8080/Login', true);
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-xhr.send(data);
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.send(JSON.stringify(logDetails));
 
 
 xhr.onreadystatechange = function(){
@@ -24,9 +29,9 @@ xhr.onreadystatechange = function(){
 		document.getElementById("result").innerHTML = this.responseText;
 	}
 	
-//    if (this.readyState == 4 && this.status == 200) {
-//    	window.location.href = "TMT.html"; 
-//    	}
+    if (this.readyState == 4 && this.status == 200) {
+    	window.location.href = "/Dashboard"; 
+    	}
     
   };
 }
@@ -39,23 +44,33 @@ var name = document.getElementById("userName").value;
 var mail = document.getElementById("mailId").value;
 var pass =	document.getElementById("password").value;
 
-var data = "name=" + encodeURIComponent(name)+ "&mail="+ encodeURIComponent(mail) + "&pass="+ encodeURIComponent(pass);
+//var data = "name=" + encodeURIComponent(name)+ "&mail="+ encodeURIComponent(mail) + "&pass="+ encodeURIComponent(pass);
+
+var logDetails = {
+		userName : name,
+		mailId : mail,
+		password : pass
+	};
 
 xhr.open('POST','http://localhost:8080/SignUp', true);
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.send(data);
 
 xhr.onreadystatechange = function(){
 	
 	if(this.readyState == 4 && this.status == 400){
-		document.getElementById("result").innerHTML = this.responseText;
-	}
-	
+		if(this.response==null){
+		document.getElementById("result").innerHTML = "User mail already exists";
+		}
+		else{
+			document.getElementById("result").innerHTML = this.response;
+		}
+	}	
     if (this.readyState == 4 && this.status == 200) {
-    	window.location.replace = "/Dashboard";
+    	window.location.href = "/Login.html";
+//    	document.getElementById("result").innerHTML = this.responseText;
 //    	document.getElementById("message").innerHTML = this.responseText; 
     	}
-    
   };
 }
 
@@ -243,7 +258,7 @@ function stop()
 function addStart(){
 	console.log("function call addStart");
 	var myTable = document.getElementById("clockTable");
-	row = myTable.insertRow(3);
+	row = myTable.insertRow(2);
 	cell1 = row.insertCell(0);
 	cell2 = row.insertCell(1);
 	cell3 = row.insertCell(2);

@@ -4,7 +4,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Validation {
+public class UserData {
 	
 	public String userName = null;
 	@Index
@@ -41,7 +41,7 @@ public class Validation {
 	}
 	
 	
-	public Validation(String userName, String mailId, String password,long Id) {
+	public UserData(String userName, String mailId, String password,long Id) {
 		this.userName=userName;
 		System.out.println(userName);
 		this.mailId=mailId;
@@ -52,7 +52,7 @@ public class Validation {
 		this.Id=Id;
 	}
 	
-	public Validation() {
+	public UserData() {
 		
 	}
 	

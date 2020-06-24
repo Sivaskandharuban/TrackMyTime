@@ -51,7 +51,7 @@ public class ClockOut extends HttpServlet {
 			
 			Long userId = (Long) session.getAttribute("userId");
 			
-			Validation user = ObjectifyService.ofy().load().type(Validation.class).id(userId).now();
+			UserData user = ObjectifyService.ofy().load().type(UserData.class).id(userId).now();
 			TimeData td = ObjectifyService.ofy().load().type(TimeData.class).id(entryId).now();
 			
 			td.setEndTime(endTime);

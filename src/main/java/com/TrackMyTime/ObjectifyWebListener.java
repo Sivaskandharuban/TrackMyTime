@@ -13,7 +13,7 @@ public class ObjectifyWebListener implements ServletContextListener {
   public void contextInitialized(ServletContextEvent event) {
     ObjectifyService.init();
     // This is a good place to register your POJO entity classes.
-     ObjectifyService.register(Validation.class);
+     ObjectifyService.register(UserData.class);
      ObjectifyService.register(TimeData.class);
      
   }

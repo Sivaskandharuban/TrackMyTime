@@ -70,7 +70,7 @@ public class ClockIn extends HttpServlet {
 			
 			Long userId = (Long) session.getAttribute("userId");
 			
-			Validation user = ObjectifyService.ofy().load().type(Validation.class).id(userId).now();
+			UserData user = ObjectifyService.ofy().load().type(UserData.class).id(userId).now();
 			TimeData timeEntry = new TimeData(mailId,startTime,endTime,++id);		
 			ObjectifyService.ofy().save().entity(timeEntry);
 			

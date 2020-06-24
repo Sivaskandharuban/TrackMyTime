@@ -32,6 +32,7 @@ public class Dashboard extends HttpServlet {
 		else {
 			
 			String mailId = session.getAttribute("mailId").toString();
+			System.out.println(mailId);
 			
 			List<TimeData> list = ObjectifyService.ofy().load().type(TimeData.class).filter("mailId", mailId).limit(10).list();
 			
@@ -39,7 +40,7 @@ public class Dashboard extends HttpServlet {
 			
 			if(list!=null) {
 			for(TimeData entry : list) {
-				result2 +="<tr><td>"+entry.getTaskDescription() + "</td><td>" + entry.getProject() + "</td><td>" + entry.getStartTime() +"</td><td>" + entry.getEndTime()+"</td><td>"+ (entry.getStartTime()-entry.getEndTime()) + "</td><td></tr>";
+				result2 +="<tr><td>"+ "Add Task Description" + "</td><td>" + "Project Working" + "</td><td>" + entry.getStartTime() +"</td><td>" + entry.getEndTime()+"</td><td>"+ (entry.getEndTime()-entry.getStartTime()) + "</td><td></tr>";
 			}
 			}
 			
@@ -104,17 +105,8 @@ public class Dashboard extends HttpServlet {
 					"                </select>  \r\n" + 
 					"                </td>\r\n" + 
 					"                \r\n" + 
-					"                <td>\r\n" + 
-					"                <button onclick = \"showEntry()\">\r\n" + 
-					"                Show Entries\r\n" + 
-					"                </button>\r\n" + 
-					"                </td>          \r\n" + 
 					"            </tr>\r\n" + 
-					"            \r\n" + 
-					"            <tr id = \"todayDate\">\r\n" + 
-					"            <td>\r\n" + 
-					"            Today's date\r\n" + 
-					"            </td>\r\n" + 
+					"            \r\n" +
 					"            </tr>\r\n" + 
 					"            \r\n" + 
 					"\r\n" + 
@@ -141,7 +133,7 @@ public class Dashboard extends HttpServlet {
 					"            \r\n" + 
 					"             <tr id = \"initial\">\r\n" + 
 					"                <td>\r\n" + 
-					"                Add task description\r\n" + 
+					"                Add Task Description\r\n" + 
 					"            </td>\r\n" + 
 					"            <td>\r\n" + 
 					"                Project Working\r\n" + 
@@ -158,7 +150,7 @@ public class Dashboard extends HttpServlet {
 					"            <td id = \"totalTime\">\r\n" + 
 					"                \r\n" + 
 					"            </td>\r\n" + 
-					"            </tr>\r\n" + result2 +
+					"            </tr><hr>\r\n" + 
 					"            \r\n" + 
 					"            \r\n" + 
 					"    \r\n" + 
@@ -174,7 +166,7 @@ public class Dashboard extends HttpServlet {
 			out.write(result);
 	}
 
-	
+	}
 
 }
-}
+

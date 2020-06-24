@@ -29,7 +29,7 @@ public class SignUp extends HttpServlet {
 	private Pattern pattern;
 	private Matcher matcher;
 
-	static Long Id =0L;
+	Long Id = 0L;
 
 	private static final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -62,14 +62,13 @@ public class SignUp extends HttpServlet {
 			out.print("<font color='red'>*invalid mail format</font>");			
 		}
 
-		Validation duplicate = ObjectifyService.ofy().load().type(Validation.class).filter("mailId",mailId).first().now();
+		UserData duplicate = ObjectifyService.ofy().load().type(UserData.class).filter("mailId",mailId).first().now();
 		System.out.println(duplicate);
 
 		if (duplicate != null) {
-			System.out.println("Hi hello");			
-			out.print("<font color='red'>*Mail ID already exists</font>");
-			System.out.println("Hi hello");	
-			response.setStatus(400);
+			response.setStatus(400);					
+			out.print("<font color='red'>*Mail ID already exists</font>");	
+			
 		}
 
 		else if (Password.length() < 8) {
@@ -78,7 +77,7 @@ public class SignUp extends HttpServlet {
 		}
 
 		else {
-			Validation user = new Validation(userName, mailId, Password, ++Id);
+			UserData user = new UserData(userName, mailId, Password, ++Id);
 
 			ObjectifyService.ofy().save().entity(user);
 			
@@ -86,13 +85,14 @@ public class SignUp extends HttpServlet {
 			session.setAttribute("mailId", mailId);
 //			session.setAttribute("lastEntry", user.getLastEntry());
 //			session.setAttribute("userId",user.getId());
-//			session.setAttribute("clockin",false);
+			session.setAttribute("clockin",false);
 			
 
 //			context.setAttribute("Logs", save);
 
 //			logs.put(userName, Password);
 			out.print("<font color='green'>Account Created Successfully</font>");
+//			response.sendRedirect("/Login.html");
 
 //			RequestDispatcher rs = request.getRequestDispatcher("TMT.html");
 //			rs.forward(request, response);

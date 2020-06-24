@@ -3,6 +3,7 @@ package com.TrackMyTime;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.codehaus.jackson.map.ObjectMapper;
 
 import com.googlecode.objectify.ObjectifyService;
 
@@ -35,22 +38,23 @@ public class Login extends HttpServlet {
 		
 
 		else {
-
-//		ServletContext context = request.getServletContext();
-//		HashMap<String, String> save = (HashMap<String, String>) context.getAttribute("Logs");
-//		
-//		if (save == null) {
-//			save = new HashMap();
-//			context.setAttribute("Logs", save);
-//		}
-
-		String mailId = request.getParameter("name");
-		String password = request.getParameter("pass");
-		
+			StringBuilder stringBuilder = new StringBuilder();
+			Scanner scanner = new Scanner(request.getInputStream());
+			while (scanner.hasNextLine()) {
+			stringBuilder.append(""+scanner.nextLine()+"\n");
+			}
+			String body = stringBuilder.toString();
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			HashMap<String, String> map = mapper.convertValue(body, HashMap.class);
+			
+		String mailId = map.get("mailId");
+		String password = map.get("password");
 
 		System.out.println(mailId + " " + password);
 
-		Validation user = ObjectifyService.ofy().load().type(Validation.class).filter("mailId", mailId).first()
+		UserData user = ObjectifyService.ofy().load().type(UserData.class).filter("mailId", mailId).first()
 				.now();
 
 		System.out.println("Hi " + user);
@@ -88,5 +92,5 @@ public class Login extends HttpServlet {
 		}
 	}
 	}
+	}
 
-}
