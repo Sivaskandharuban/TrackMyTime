@@ -9,24 +9,24 @@ var mail = document.getElementById("mailId").value;
 var pass =	document.getElementById("Password").value;
 // var params = "name="+name+"'&amp;pass="+pass;
 
-//var data = "name=" + encodeURIComponent(name)+ "&pass="+ encodeURIComponent(pass);
+//var data = "mail=" + encodeURIComponent(mail)+ "&pass="+ encodeURIComponent(pass);
 
 var logDetails = {
 	mailId : mail,
 	password : pass
 };
 
-//var jsonLogDetails = JSON.stringify(logDetails);
+var jsonLogDetails = JSON.stringify(logDetails);
 
 xhr.open('POST','http://localhost:8080/Login', true);
-xhr.setRequestHeader('Content-Type', 'application/json');
-xhr.send(JSON.stringify(logDetails));
+xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.send(jsonLogDetails);
 
 
 xhr.onreadystatechange = function(){
 	
 	if(this.readyState == 4 && this.status == 400){
-		document.getElementById("result").innerHTML = this.responseText;
+		document.getElementById("loginResult").innerHTML = this.responseText;
 	}
 	
     if (this.readyState == 4 && this.status == 200) {
@@ -52,25 +52,28 @@ var logDetails = {
 		password : pass
 	};
 
+var jsonLogDetails = JSON.stringify(logDetails);
+
 xhr.open('POST','http://localhost:8080/SignUp', true);
 xhr.setRequestHeader('Content-Type', 'application/json');
-xhr.send(data);
+xhr.send(jsonLogDetails);
 
 xhr.onreadystatechange = function(){
 	
 	if(this.readyState == 4 && this.status == 400){
 		if(this.response==null){
-		document.getElementById("result").innerHTML = "User mail already exists";
+		document.getElementById("signupResult").innerHTML = "User mail already exists";
 		}
 		else{
-			document.getElementById("result").innerHTML = this.response;
+			console.log("invoked");
+			document.getElementById("signupResult").innerHTML = this.response;
 		}
 	}	
-    if (this.readyState == 4 && this.status == 200) {
-    	window.location.href = "/Login.html";
-//    	document.getElementById("result").innerHTML = this.responseText;
+    if (this.readyState == 4 && this.status == 200) {    	
+    	window.location.replace("/Login.html");
+    	document.getElementById("loginResult").innerHTML = this.responseText;
 //    	document.getElementById("message").innerHTML = this.responseText; 
-    	}
+    }
   };
 }
 
@@ -313,7 +316,22 @@ function timer2(){
 	
 }
 
-//var entries = 
+function signOut()
+{
+var xhr = new XMLHttpRequest();
+
+xhr.open('GET','http://localhost:8080/Signout', true);
+xhr.send();
+
+xhr.onreadystatechange = function(){
+    if (this.readyState == 4 && this.status == 200) {
+//    	document.getElementById("loginResult").innerHTML = this.responseText;
+    	window.location.href = "/Login.html";
+//    	document.getElementById("message").innerHTML = this.responseText; 
+    	}
+  };
+}
+
 
 
 	

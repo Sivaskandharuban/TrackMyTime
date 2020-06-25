@@ -26,6 +26,7 @@ public class TimeData {
 	}
 	@Index
 	String mailId;
+	@Index
 	Long startTime;
 	Long endTime;
 	@com.googlecode.objectify.annotation.Id
@@ -33,18 +34,26 @@ public class TimeData {
 	String taskDescription;
 	String project;
 	
-	public TimeData(String mailId, Long startTime, Long endTime, Long id) {
+	public TimeData(String mailId, Long startTime, Long endTime) {
 		// TODO Auto-generated constructor stub
 		 this.mailId = mailId;
 		 this.startTime = startTime;
 		 this.endTime = endTime;
 		 
-		 this.id = id;
-		 
 		 
 	}
 	
 	
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 	public TimeData() {
 		// TODO Auto-generated constructor stub
 		

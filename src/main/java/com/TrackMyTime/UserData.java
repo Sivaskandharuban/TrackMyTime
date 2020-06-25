@@ -10,20 +10,20 @@ public class UserData {
 	@Index
 	public String mailId = null;
 	public String password = null;
+	public long lastEntry;
+	public boolean clockin;
 	@com.googlecode.objectify.annotation.Id
 	Long Id;
 	
-	public long lastEntry;
-	public boolean clockin;
 	
-	public Long getId() {
-		return Id;
+	
+	public UserData(String userName, String mailId, String password) {
+		this.userName=userName;
+	System.out.println(mailId);
+			System.out.println(userName);
+		this.mailId=mailId;
+		this.password=password;
 	}
-
-	public void setId(Long id) {
-		Id = id;
-	}
-
 	public long getLastEntry() {
 		return lastEntry;
 	}
@@ -41,17 +41,7 @@ public class UserData {
 	}
 	
 	
-	public UserData(String userName, String mailId, String password,long Id) {
-		this.userName=userName;
-		System.out.println(userName);
-		this.mailId=mailId;
-		System.out.println(mailId);
-		this.password=password;
 		
-	
-		this.Id=Id;
-	}
-	
 	public UserData() {
 		
 	}
@@ -68,6 +58,12 @@ public class UserData {
 	}
 	public void setMailId(String mailId) {
 		this.mailId = mailId;
+	}
+	public Long getId() {
+		return Id;
+	}
+	public void setId(Long id) {
+		Id = id;
 	}
 	public String getPassword() {
 		return password;

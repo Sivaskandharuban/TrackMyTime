@@ -25,8 +25,14 @@ import com.googlecode.objectify.ObjectifyService;
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		response.setHeader("Cache-Control","no-cache");
+		  response.setHeader("Cache-Control","no-store");
+		  response.setHeader("Pragma","no-cache");
+		  response.setDateHeader ("Expires", 0);
 		
 		PrintWriter out = response.getWriter();		
 		
@@ -47,7 +53,7 @@ public class Login extends HttpServlet {
 			
 			ObjectMapper mapper = new ObjectMapper();
 			
-			HashMap<String, String> map = mapper.convertValue(body, HashMap.class);
+			HashMap<String, String> map = mapper.readValue(body, HashMap.class);
 			
 		String mailId = map.get("mailId");
 		String password = map.get("password");
@@ -61,7 +67,7 @@ public class Login extends HttpServlet {
 
 		if (user == null) {
 			response.setStatus(400);
-			out.print("Mail id does not exist");
+			out.print("<font color = 'red'>Mail Id does not exist, Please signup</font>");
 		}
 
 		else if (user.getMailId().equals(mailId)) {

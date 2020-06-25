@@ -28,10 +28,12 @@ public class Signout extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();		
-	        session.invalidate();
-	        response.sendRedirect("login.html");
-		
+		HttpSession session = request.getSession();	
+		response.setHeader("Cache-Control","no-cache");
+		  response.setHeader("Cache-Control","no-store");
+		  response.setHeader("Pragma","no-cache");
+		  response.setDateHeader ("Expires", 0);
+	        session.invalidate();		
 	}
 
 }

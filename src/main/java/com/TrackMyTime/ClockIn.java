@@ -22,10 +22,16 @@ import com.googlecode.objectify.ObjectifyService;
 public class ClockIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	Long id=0L;
+	Long id = 5L;
+
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setHeader("Cache-Control","no-cache");
+		  response.setHeader("Cache-Control","no-store");
+		  response.setHeader("Pragma","no-cache");
+		  response.setDateHeader ("Expires", 0);
 		
 //		String mailId = request.getParameter("mail");
 //		System.out.println(mailId);
@@ -71,7 +77,7 @@ public class ClockIn extends HttpServlet {
 			Long userId = (Long) session.getAttribute("userId");
 			
 			UserData user = ObjectifyService.ofy().load().type(UserData.class).id(userId).now();
-			TimeData timeEntry = new TimeData(mailId,startTime,endTime,++id);		
+			TimeData timeEntry = new TimeData(mailId,startTime,endTime);		
 			ObjectifyService.ofy().save().entity(timeEntry);
 			
 			user.setLastEntry(id);

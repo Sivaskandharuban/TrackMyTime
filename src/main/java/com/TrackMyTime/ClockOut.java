@@ -29,6 +29,7 @@ public class ClockOut extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		Long endTime= System.currentTimeMillis();
+		System.out.println("End time Check" +endTime);
 		HttpSession session = request.getSession(false);
 		
 	if(session==null){
@@ -48,12 +49,13 @@ public class ClockOut extends HttpServlet {
 //			fetch entry and store;
 			
 			String mailId = (String) session.getAttribute("mailId");
+			System.out.println(mailId);
 			
 			Long userId = (Long) session.getAttribute("userId");
 			
 			UserData user = ObjectifyService.ofy().load().type(UserData.class).id(userId).now();
-			TimeData td = ObjectifyService.ofy().load().type(TimeData.class).id(entryId).now();
-			
+			TimeData td = ObjectifyService.ofy().load().type(TimeData.class).id(mailId).now();
+			System.out.println(td.toString());
 			td.setEndTime(endTime);
 			ObjectifyService.ofy().save().entity(td);
 			

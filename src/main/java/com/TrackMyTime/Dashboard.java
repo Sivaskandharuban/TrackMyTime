@@ -1,8 +1,14 @@
 package com.TrackMyTime;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +26,13 @@ public class Dashboard extends HttpServlet {
        
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setHeader("Cache-Control","no-cache");
+		  response.setHeader("Cache-Control","no-store");
+		  response.setHeader("Pragma","no-cache");
+		  response.setDateHeader ("Expires", 0);
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		PrintWriter out = response.getWriter();		
 		
 		HttpSession session = request.getSession(false);
@@ -28,19 +41,39 @@ public class Dashboard extends HttpServlet {
 			response.sendRedirect("Login.html");
 		}
 		
-
+		
+		
+		
 		else {
+			
+						
 			
 			String mailId = session.getAttribute("mailId").toString();
 			System.out.println(mailId);
 			
-			List<TimeData> list = ObjectifyService.ofy().load().type(TimeData.class).filter("mailId", mailId).limit(10).list();
+			List<TimeData> list = ObjectifyService.ofy().load().type(TimeData.class).filter("mailId", mailId).order("-startTime").list();
+			
+//			 Collections.sort(list, Collections.reverseOrder());
 			
 			String result2 = "";
 			
+			String lastDate = ""; 
+			
 			if(list!=null) {
 			for(TimeData entry : list) {
-				result2 +="<tr><td>"+ "Add Task Description" + "</td><td>" + "Project Working" + "</td><td>" + entry.getStartTime() +"</td><td>" + entry.getEndTime()+"</td><td>"+ (entry.getEndTime()-entry.getStartTime()) + "</td><td></tr>";
+				
+				String date = new java.text.SimpleDateFormat("MM/dd/yyyy").format(new java.util.Date (entry.getStartTime()));
+				
+				if(!lastDate.equals(date)) {
+					lastDate=date;
+				result2 +=						
+						"<tr><td>"+date +"</td></tr>";
+				}
+						
+						
+					result2 += "<tr><td>"+ "Add Task Description" + "</td><td>" + "Project Working" + "</td><td>" + sdf.format(new Date(entry.getStartTime())) +"</td><td>" 
+			+ sdf.format(new Date(entry.getEndTime()))+"</td><td>"
+						+ ((entry.getEndTime()- entry.getStartTime())/1000/60/60<10?"0"+(entry.getEndTime()- entry.getStartTime())/1000/60/60 : (entry.getEndTime()- entry.getStartTime())/1000/60/60) +"h " + ((entry.getEndTime()- entry.getStartTime())/1000/60<10?"0"+(entry.getEndTime()- entry.getStartTime())/1000/60 : (entry.getEndTime()- entry.getStartTime())/1000/60)+"m" + "</td></tr>";
 			}
 			}
 			
@@ -66,8 +99,7 @@ public class Dashboard extends HttpServlet {
 					"          </label>\r\n" + 
 					"          \r\n" + 
 					"          <div id = \"Signout\">\r\n" + 
-					"<form action=\"\\Signout\">\r\n" + 
-					"<input type = \"submit\" value = \"Sign out\">\r\n" + 
+					"<input type = \"submit\" value = \"Sign out\" onclick =\" signOut()\">\r\n" + 
 					"</form>\r\n" + 
 					"</div>\r\n" + 
 					"         \r\n" + 
@@ -150,7 +182,7 @@ public class Dashboard extends HttpServlet {
 					"            <td id = \"totalTime\">\r\n" + 
 					"                \r\n" + 
 					"            </td>\r\n" + 
-					"            </tr><hr>\r\n" + 
+					"            </tr><hr>\r\n" + result2+
 					"            \r\n" + 
 					"            \r\n" + 
 					"    \r\n" + 
