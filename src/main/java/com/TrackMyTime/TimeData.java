@@ -28,6 +28,7 @@ public class TimeData {
 	String mailId;
 	@Index
 	Long startTime;
+	@Index
 	Long endTime;
 	@com.googlecode.objectify.annotation.Id
 	Long id;

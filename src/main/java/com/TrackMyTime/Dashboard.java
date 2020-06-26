@@ -181,8 +181,8 @@ public class Dashboard extends HttpServlet {
 					"\r\n" + 
 					"            <td id = \"totalTime\">\r\n" + 
 					"                \r\n" + 
-					"            </td>\r\n" + 
-					"            </tr><hr>\r\n" + result2+
+					"            </td>\r\n" +	
+					"            </tr>\r\n" + result2+	
 					"            \r\n" + 
 					"            \r\n" + 
 					"    \r\n" + 

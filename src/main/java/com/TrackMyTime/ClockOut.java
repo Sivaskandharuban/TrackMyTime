@@ -18,7 +18,7 @@ import com.googlecode.objectify.ObjectifyService;
 /**
  * Servlet implementation class ClockOut
  */
-@WebServlet(asyncSupported = true, urlPatterns = { "/ClockOut" })
+@WebServlet(urlPatterns = { "/ClockOut" })
 public class ClockOut extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -29,6 +29,7 @@ public class ClockOut extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		Long endTime= System.currentTimeMillis();
+		
 		System.out.println("End time Check" +endTime);
 		HttpSession session = request.getSession(false);
 		
@@ -48,14 +49,15 @@ public class ClockOut extends HttpServlet {
 		else{
 //			fetch entry and store;
 			
-			String mailId = (String) session.getAttribute("mailId");
+			String mailId = session.getAttribute("mailId").toString();
 			System.out.println(mailId);
 			
 			Long userId = (Long) session.getAttribute("userId");
 			
 			UserData user = ObjectifyService.ofy().load().type(UserData.class).id(userId).now();
-			TimeData td = ObjectifyService.ofy().load().type(TimeData.class).id(mailId).now();
-			System.out.println(td.toString());
+			TimeData td = ObjectifyService.ofy().load().type(TimeData.class).filter("mailId",mailId).filter("endTime",0).first().now();	
+			
+			System.out.println(endTime + " " + td.getEndTime());
 			td.setEndTime(endTime);
 			ObjectifyService.ofy().save().entity(td);
 			
@@ -64,6 +66,8 @@ public class ClockOut extends HttpServlet {
 			session.setAttribute("entryId",null);
 			session.setAttribute("clockin",false);
 			ObjectifyService.ofy().save().entity(user);
+			
+			System.out.println(endTime + " " + td.getEndTime());
 			
 			
 			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));

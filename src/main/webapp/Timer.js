@@ -18,7 +18,7 @@ var logDetails = {
 
 var jsonLogDetails = JSON.stringify(logDetails);
 
-xhr.open('POST','http://localhost:8080/Login', true);
+xhr.open('POST','/Login', true);
 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 xhr.send(jsonLogDetails);
 
@@ -54,7 +54,7 @@ var logDetails = {
 
 var jsonLogDetails = JSON.stringify(logDetails);
 
-xhr.open('POST','http://localhost:8080/SignUp', true);
+xhr.open('POST','/SignUp', true);
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.send(jsonLogDetails);
 
@@ -112,6 +112,20 @@ var endTime;
 
 function set(){
 	
+//	var tSwitcher = document.getElementById('check');
+//	let element = document.getElementById('check');
+//	element.classList.add(onpageLoad);
+//
+//	  if(tSwitcher.checked){
+//	      localStorage.setItem('theme', 'dark-mode');
+//	        element.classList.add('dark-mode');
+//	    } else {
+//	      localStorage.setItem('theme', '');
+//	        element.classList.remove('dark-mode');
+//	    }
+//	}	
+//	
+	
 onOff = onOff+1;	
 	if(onOff%2==1){
 		if(onOff==1){
@@ -121,7 +135,7 @@ onOff = onOff+1;
 			console.log(startTime);
 			endTime = 0;
 
-			xhr.open('GET','http://localhost:8080/ClockIn', true);
+			xhr.open('GET','/ClockIn', true);
 			xhr.send();
 		console.log("redirecting to start");
 		 start();
@@ -147,7 +161,7 @@ onOff = onOff+1;
 			startTime = Date.now();
 			console.log(startTime);
 			endTime = 0;
-			xhr.open('GET','http://localhost:8080/ClockIn', true);
+			xhr.open('GET','/ClockIn', true);
 			xhr.send();
 			console.log("redirecting to addStart");
 			addStart();
@@ -170,7 +184,7 @@ onOff = onOff+1;
 			endTime = Date.now();
 			console.log(endTime);
 
-			xhr.open('GET','http://localhost:8080/ClockOut', true);
+			xhr.open('GET','/ClockOut', true);
 			xhr.send();
 		console.log("redirecting to stop");
 		stop();
@@ -190,7 +204,7 @@ onOff = onOff+1;
 			endTime = Date.now();
 			console.log(endTime);
 
-			xhr.open('GET','http://localhost:8080/ClockOut', true);
+			xhr.open('GET','/ClockOut', true);
 			xhr.send();
 			console.log("redirecting to addStop");
 			addStop();
@@ -320,7 +334,7 @@ function signOut()
 {
 var xhr = new XMLHttpRequest();
 
-xhr.open('GET','http://localhost:8080/Signout', true);
+xhr.open('GET','/Signout', true);
 xhr.send();
 
 xhr.onreadystatechange = function(){
